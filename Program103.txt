@@ -1,0 +1,62 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Threading;
+
+namespace nishki
+{
+    internal class Program
+    {
+        public static Person[] hora = new Person[3];
+        static void Main(string[] args)
+        {
+            Thread[] nishki = { new Thread(insert), new Thread(insert), new Thread(insert), new Thread(print) };
+            nishki[0].Name = "Purva";
+            nishki[1].Name = "Vtora";
+            nishki[2].Name = "Treta";
+
+            foreach (var item in nishki)
+            {
+                item.Start();
+            }
+
+        }
+        static void print()
+        {
+            Console.WriteLine("Horata sa:");
+            foreach (var item in hora)
+            {
+                Console.WriteLine(item.name + " " + item.age);
+            }
+        }
+        static void insert()
+        {
+            lock (hora)
+            {
+                if (Thread.CurrentThread.Name == "Purva")
+                    hora[0] = new Person("Lubo", 17);
+
+                else if (Thread.CurrentThread.Name == "Vtora")
+                    hora[1] = new Person("5k0", 16);
+
+                else if (Thread.CurrentThread.Name == "Treta")
+                    hora[2] = new Person("Yoni", 17);
+
+                Console.WriteLine(Thread.CurrentThread.Name + " is working.");
+            }
+        }
+    }
+    class Person
+    {
+        public string name;
+        public int age;
+
+        public Person(string name, int age)
+        {
+            this.name = name;
+            this.age = age;
+        }
+    }
+}
